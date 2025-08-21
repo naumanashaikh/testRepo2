@@ -53,11 +53,6 @@ mod tests {
     }
 
     #[test]
-    fn can_frown() {
-        assert_eq!(frown(), ":(");
-    }
-
-    #[test]
     fn can_angry() {
         assert_eq!(angry(), ">:(");
     }

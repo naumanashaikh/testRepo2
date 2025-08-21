@@ -14,11 +14,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-    - uses: actions-rs/toolchain@v1
+    - name: Install Rust (stable) with llvm-tools
+      uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2025-07-20
+        toolchain: stable
         override: true
         components: llvm-tools-preview
 
@@ -29,11 +31,11 @@ jobs:
       run: cargo clean
 
     - name: Run tests with coverage
-      run: |
-        export CARGO_INCREMENTAL=0
-        export RUSTFLAGS="-Zinstrument-coverage"
-        export LLVM_PROFILE_FILE="coverage-%p-%m.profraw"
-        cargo test --verbose
+      env:
+        CARGO_INCREMENTAL: '0'
+        RUSTFLAGS: '-C instrument-coverage'
+        LLVM_PROFILE_FILE: 'coverage-%p-%m.profraw'
+      run: cargo test --verbose
 
     - name: Generate coverage report
       run: |
